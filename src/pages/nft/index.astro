@@ -101,9 +101,10 @@ const openseaCollection = 'https://opensea.io/collection/minero-s21-andes-solarh
         <ul class="space-y-2.5 mb-5">
           {[
             'Activo digital limitado (100 NFTs)',
-            'Respaldo en equipos reales de minería',
-            'Trazabilidad y transparencia total en blockchain',
-            'Propiedad verificable en tu wallet',
+            'Sin desembolsar altas sumas de inversión inicial',
+            'Sin gestionar hardware, hosting, refrigeración ni mantenimiento',
+            'Acceder a minería real de criptomonedas de forma simple, segura y transparente',
+            'Recibe el Margen Operativo de tus NFTs semanalmente en tu wallet',
           ].map((t) => (
             <li class="flex gap-2.5 text-sm text-white/75 items-start">
               <span class="text-[#f7ad1f] font-bold shrink-0">✓</span>
@@ -193,7 +194,7 @@ const openseaCollection = 'https://opensea.io/collection/minero-s21-andes-solarh
       </div>
       <div class="max-w-[560px] pb-8 md:pb-10 md:py-0">
         <h2 class="font-maven font-black text-xl md:text-[clamp(1.25rem,2.8vw,2rem)] text-[#1d2242] uppercase leading-tight mb-4">
-          Recompensas diarias en BTC o en POL directamente a tu wallet
+          Recibe tus recompensas semanales en BTC o en POL directamente a tu wallet
         </h2>
         <p class="text-[15px] text-[#0d1020]/78 leading-relaxed">
           Cada NFT te da acceso a una fracción proporcional de los ingresos generados por la minería de Bitcoin con
@@ -322,7 +323,7 @@ const openseaCollection = 'https://opensea.io/collection/minero-s21-andes-solarh
           class="font-maven font-black text-lg md:text-[clamp(1.1rem,2.4vw,1.65rem)]"
           style="background: linear-gradient(135deg, #e08324, #f7ad1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"
         >
-          Galería NFT · Minero S21+ | Andes SolarHash
+          Galería NFT · Minero S21Pro | Andes SolarHash
         </h2>
         <a
           href={openseaCollection}
@@ -834,13 +835,19 @@ const openseaCollection = 'https://opensea.io/collection/minero-s21-andes-solarh
     }
 
     const FAQS = [
-      ['¿Qué es un NFT productivo de Andes Solar Hash?', 'Es un token en blockchain Polygon que representa una fracción de propiedad en nuestros equipos mineros S21+. Al poseerlo, recibes una proporción de los BTC generados por esos equipos.'],
+      ['¿Qué es un NFT productivo de Andes Solar Hash?', 'Es un token en blockchain Polygon que representa una fracción del resultado operativo del equipo. Al poseerlo, recibes una proporción de los BTC generados por esos equipos, después de cubrir sus costos.'],
       ['¿Cuánto puedo esperar ganar con mi NFT?', 'Los rendimientos varían según el precio del Bitcoin, la dificultad de la red y la eficiencia del equipo. Las estimaciones son orientativas y sujetas al mercado.'],
       ['¿Cómo se realizan los pagos de recompensas?', 'Los pagos se coordinan según el modelo del proyecto en POL (Polygon) o BTC a la wallet que posea el NFT.'],
       ['¿Puedo vender mi NFT en el mercado secundario?', 'Sí, los NFTs son transferibles en OpenSea y marketplaces compatibles con Polygon.'],
-      ['¿Qué infraestructura respalda estos NFTs?', 'Equipos Bitmain S21+ con hosting competitivo en Chile.'],
-      ['¿Cuántos NFTs existen?', 'La colección activa tiene 100 NFTs en Polygon.'],
+      ['¿Qué infraestructura respalda estos NFTs?', 'Equipos Bitmain adquiridos por Andes SolarHash directo en Emiratos Árabes Unidos, conectados en alguna de las principales granjas de minería del mundo.'],
+      ['¿Cuántos NFTs existen?', 'Existen 100 NFTs por cada equipo de minería tokenizado.'],
       ['¿Cómo verifico la propiedad?', 'Puedes verificar en PolygonScan el contrato ' + CA + '.'],
+      ['¿Cuáles son los costos del equipo mes a mes?', 'Los costos operativos del equipo se dividen en: energía eléctrica 0.050 USD/kWh, servicio de hosting 0.026 USD/kWh y administración 0.004 USD/kWh. Estos se deducen de los ingresos brutos de minería antes de distribuir el margen operativo a los titulares de NFTs.'],
+      ['¿Qué pasa si los costos fueron mayores a los ingresos?', 'Se genera una línea de crédito para el equipo, que será descontada de los flujos futuros cuando los ingresos superen los costos. En ningún caso el titular del NFT deberá realizar pagos adicionales.'],
+      ['¿Qué son los Satoshis?', 'El Satoshi es la unidad más pequeña del Bitcoin. Un Bitcoin equivale a 100.000.000 Satoshis (1 BTC = 100,000,000 SAT). Es la unidad con la que se miden las recompensas de minería en cantidades pequeñas.'],
+      ['¿Por qué son importantes los Satoshis en la minería de Bitcoin?', 'En la minería de Bitcoin, los ingresos diarios por equipo suelen expresarse en Satoshis porque representan fracciones muy pequeñas de un BTC completo. Entender los Satoshis permite evaluar con precisión la productividad de un equipo y comparar rendimientos entre distintos modelos de mineros.'],
+      ['¿Cómo se calcula el flujo de recompensas?', 'El flujo neto de recompensas se calcula restando los costos operativos (energía, servicio y administración) de los ingresos brutos de minería. El resultado se distribuye en partes iguales entre los 100 NFTs del equipo tokenizado.'],
+      ['¿Cuándo se transfieren los márgenes?', 'Semanalmente Andes SolarHash transfiere el margen operativo neto acumulado de la semana a cada wallet que posea un NFT activo del equipo correspondiente.'],
     ];
 
     function buildFAQ() {

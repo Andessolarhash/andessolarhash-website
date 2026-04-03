@@ -5,23 +5,21 @@ import Layout from '../../layouts/Layout.astro';
 
 const title = 'Hosting Minero en Chile | Andes Solar Hash';
 const description =
-  'Hosting profesional para ASIC con tarifa eléctrica fija $0.088 USD/kWh, uptime 99.9% y soporte local en Chile.';
+  'Hosting profesional para ASIC con tarifa eléctrica fija $0.080 USD/kWh, uptime 99.9% y soporte local en Chile.';
 
 const imgMiner = '/images/hosting/figma/hero_miner.webp';
 const imgWatermark = '/images/hosting/figma/btc_watermark.webp';
 
 const pillars = [
   {
-    title: ['Eficiencia Energética', 'Superior'],
+    title: ['Eficiencia Energética y Operativa Superior'],
     body: [
-      'Nuestra tarifa fija y baja ($0.088 USD/kWh) le permite ',
-      'maximizar el margen operativo',
-      ' de sus mineros S21, asegurando que su costo de producción de Bitcoin sea el más competitivo del mercado.',
+      'Andes SolarHash utiliza algunas de las mejores y más grandes granjas de minería del mundo, con el objetivo de ofrecer la mejor relación entre precio (USD/KWh) y un uptime de los equipos asegurado de 96% o superior.',
     ],
     icon: 'zap',
   },
   {
-    title: ['Uptime Garantizado 99.9%'],
+    title: ['Uptime Garantizado 96%'],
     body: [
       'Ofrecemos estabilidad operativa garantizada. Nuestro centro de datos está optimizado para la disipación de calor y la redundancia eléctrica, minimizando las interrupciones y el ',
       'downtime',
@@ -39,7 +37,7 @@ const pillars = [
 ];
 
 const contractRows = [
-  { label: 'Tarifa Eléctrica Fija', value: '$0.088 USD/kWh', labelBold: true, valueMono: true },
+  { label: 'Costo Eléctrico, Servicio y Administración Fijo', value: '$0.080 USD/kWh', labelBold: true, valueMono: true },
   {
     label: 'Monitoreo Técnico',
     value: '24 Horas / 7 Días a la semana',
@@ -48,13 +46,13 @@ const contractRows = [
   },
   {
     label: 'Uptime Garantizado',
-    value: '99.9% (SLA en contrato)',
+    value: '96% (SLA en contrato)',
     labelMuted: true,
     valueMono: true,
   },
   {
     label: 'Mantenimiento de Hardware',
-    value: 'Soporte Local y Preventivo',
+    value: 'Mantenimiento básico de Hardware',
     icon: 'wrench',
     labelMuted: true,
   },
@@ -77,13 +75,10 @@ const contractRows = [
             class="font-maven font-black text-4xl sm:text-5xl lg:text-[3.35rem] leading-[1.05] mb-6"
             style="background: linear-gradient(to right, #e08324, #f7ad1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"
           >
-            Hosting Minero con<br />
-            Costo Eléctrico de<br />
-            Fábrica.
+            Hosting Minero Líder a Nivel Mundial en EAU
           </h1>
           <p class="font-archivo text-lg md:text-xl text-[#d1d5db] leading-relaxed mb-8">
-            Asegure el margen de su inversión con nuestra <strong class="text-white">tarifa fija de $0.088 USD/kWh</strong> en
-            infraestructura optimizada para el largo plazo. No más costos variables, solo acumulación eficiente.
+            Andes SolarHash mantiene alianzas con algunas de las principales granjas de minería del mundo, apalancándonos de su infraestructura y su optimizada operación. Lo que nos permite ofrecer una tarifa fija de hosting de 0.080 USD/KWh. No más costos variables, solo acumulación eficiente.
           </p>
           <a
             href="/contacto/#contacto"
@@ -112,7 +107,7 @@ const contractRows = [
             class="relative z-20 w-full max-w-md mt-4 rounded-xl border-4 border-[#e08324] bg-[#0b0d1b]/80 backdrop-blur-sm shadow-2xl text-center px-6 py-8"
             style="box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);"
           >
-            <p class="font-maven font-bold text-sm text-white mb-3">TARIFA ELÉCTRICA GARANTIZADA</p>
+            <p class="font-maven font-bold text-sm text-white mb-3">VALOR FIJO DE HOSTING</p>
             <div class="flex flex-wrap items-end justify-center gap-2 mb-2">
               <span
                 class="font-mono font-bold text-5xl sm:text-6xl lg:text-7xl leading-none"
@@ -202,7 +197,7 @@ const contractRows = [
     />
     <div class="relative z-10 max-w-3xl mx-auto">
       <h2 class="font-maven font-bold text-2xl md:text-[30px] text-[#f7ad1f] text-center mb-10 md:mb-12">
-        Detalles del Contrato de Hosting Anual
+        Detalles del Servicio de Hosting
       </h2>
       <div class="space-y-0 font-archivo text-lg">
         {contractRows.map((row) => (
