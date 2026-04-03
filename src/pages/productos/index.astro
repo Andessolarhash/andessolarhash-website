@@ -393,22 +393,59 @@ const glossary = [
         Suscríbase y reciba semanalmente análisis de mercado, novedades del sector y oportunidades de minería directamente en su correo.
       </p>
       <form
+        id="newsletter-form-cat"
         class="flex flex-col sm:flex-row gap-3 justify-center items-stretch max-w-md mx-auto"
-        onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!');"
       >
         <input
           type="email"
+          id="newsletter-email-cat"
           required
           placeholder="Su correo electrónico aquí..."
           class="flex-1 rounded px-4 py-3.5 font-archivo text-base bg-white/10 border border-white/20 text-white placeholder:text-[#6b7280] outline-none focus:border-[#f7ad1f]/50"
         />
         <button
           type="submit"
+          id="newsletter-btn-cat"
           class="rounded-full px-8 py-3.5 font-maven font-bold text-[#1d2242] bg-[#f7ad1f] hover:opacity-95 transition-opacity whitespace-nowrap"
         >
           SUSCRIBIRME
         </button>
       </form>
+      <p id="newsletter-msg-cat" style="display:none; margin-top:12px; font-weight:600;"></p>
+      <script>
+        document.getElementById('newsletter-form-cat').addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const email = document.getElementById('newsletter-email-cat').value;
+          const btn = document.getElementById('newsletter-btn-cat');
+          const msg = document.getElementById('newsletter-msg-cat');
+          btn.disabled = true;
+          btn.textContent = 'Enviando...';
+          try {
+            const res = await fetch('/.netlify/functions/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email })
+            });
+            if (res.ok) {
+              msg.style.color = '#f7ad1f';
+              msg.textContent = '¡Gracias! Te has suscrito correctamente.';
+              document.getElementById('newsletter-email-cat').value = '';
+              btn.textContent = '¡Suscrito!';
+            } else {
+              msg.style.color = '#ff6b6b';
+              msg.textContent = 'Hubo un error. Intenta de nuevo.';
+              btn.disabled = false;
+              btn.textContent = 'SUSCRIBIRME';
+            }
+          } catch {
+            msg.style.color = '#ff6b6b';
+            msg.textContent = 'Error de conexión. Intenta de nuevo.';
+            btn.disabled = false;
+            btn.textContent = 'SUSCRIBIRME';
+          }
+          msg.style.display = 'block';
+        });
+      </script>
     </div>
   </section>
 

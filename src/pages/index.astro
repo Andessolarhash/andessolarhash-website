@@ -248,10 +248,45 @@ try {
     <div class="newsletter-container">
       <h2>Reciba información sobre minería de criptomonedas.</h2>
       <p>Suscríbase y reciba semanalmente análisis de mercado, novedades del sector y oportunidades de minería directamente en su correo.</p>
-      <form onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!');">
-        <input type="email" placeholder="Su correo electrónico aquí..." required />
-        <button type="submit">SUSCRIBIRME</button>
+      <form id="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Su correo electrónico aquí..." required />
+        <button type="submit" id="newsletter-btn">SUSCRIBIRME</button>
       </form>
+      <p id="newsletter-msg" style="display:none; margin-top:12px; font-weight:600;"></p>
+      <script>
+        document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const email = document.getElementById('newsletter-email').value;
+          const btn = document.getElementById('newsletter-btn');
+          const msg = document.getElementById('newsletter-msg');
+          btn.disabled = true;
+          btn.textContent = 'Enviando...';
+          try {
+            const res = await fetch('/.netlify/functions/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email })
+            });
+            if (res.ok) {
+              msg.style.color = '#f7ad1f';
+              msg.textContent = '¡Gracias! Te has suscrito correctamente.';
+              document.getElementById('newsletter-email').value = '';
+              btn.textContent = '¡Suscrito!';
+            } else {
+              msg.style.color = '#ff6b6b';
+              msg.textContent = 'Hubo un error. Intenta de nuevo.';
+              btn.disabled = false;
+              btn.textContent = 'SUSCRIBIRME';
+            }
+          } catch {
+            msg.style.color = '#ff6b6b';
+            msg.textContent = 'Error de conexión. Intenta de nuevo.';
+            btn.disabled = false;
+            btn.textContent = 'SUSCRIBIRME';
+          }
+          msg.style.display = 'block';
+        });
+      </script>
     </div>
   </section>
 
