@@ -90,6 +90,7 @@
   color: var(--text-light);
   max-width: 720px;
   margin-bottom: 26px;
+  text-align: left;
 }
 
 .ash-ficha .hero-actions {
