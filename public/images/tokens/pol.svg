@@ -1,4 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">
-  <rect width="38" height="38" rx="8" fill="#8247E5"/>
-  <path fill="white" d="M26.2 13.8a2.1 2.1 0 0 0-2.1 0l-4.8 2.8-3.2 1.8-4.8 2.8a2.1 2.1 0 0 1-2.1 0l-3.8-2.2A2.1 2.1 0 0 1 4.3 17v-4.3a2.1 2.1 0 0 1 1.1-1.8l3.7-2.1a2.1 2.1 0 0 1 2.1 0l3.7 2.1a2.1 2.1 0 0 1 1.1 1.8v2.8l3.2-1.8v-2.8a4.2 4.2 0 0 0-2.1-3.6L13.4 5a4.2 4.2 0 0 0-4.2 0L5.4 7.3A4.2 4.2 0 0 0 3.3 11v5.8a4.2 4.2 0 0 0 2.1 3.6l3.8 2.2a4.2 4.2 0 0 0 4.2 0l4.8-2.8 3.2-1.8 4.8-2.8a2.1 2.1 0 0 1 2.1 0l3.7 2.1a2.1 2.1 0 0 1 1.1 1.8v4.3a2.1 2.1 0 0 1-1.1 1.8l-3.7 2.1a2.1 2.1 0 0 1-2.1 0l-3.7-2.1a2.1 2.1 0 0 1-1.1-1.8v-2.8l-3.2 1.8v2.8a4.2 4.2 0 0 0 2.1 3.6l3.8 2.2a4.2 4.2 0 0 0 4.2 0l3.8-2.2a4.2 4.2 0 0 0 2.1-3.6V17a4.2 4.2 0 0 0-2.1-3.6z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#7B3FE4"/>
+  <!-- Right hexagon ring (complete) — pointy-top, center (122,100), r_out=48, r_in=28 -->
+  <path fill="white" fill-rule="evenodd"
+    d="M122,52 L163,76 L163,124 L122,148 L81,124 L81,76 Z
+       M122,72 L147,86 L147,114 L122,128 L97,114 L97,86 Z"/>
+  <!-- Left hexagon ring (clipped visually to left side by clip-path) -->
+  <defs>
+    <clipPath id="lclip">
+      <rect x="0" y="0" width="106" height="200"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#lclip)">
+    <path fill="white" fill-rule="evenodd"
+      d="M78,52 L119,76 L119,124 L78,148 L37,124 L37,76 Z
+         M78,72 L103,86 L103,114 L78,128 L53,114 L53,86 Z"/>
+  </g>
 </svg>
