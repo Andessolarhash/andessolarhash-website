@@ -1,18 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#7B3FE4"/>
-  <!-- Right hexagon ring (complete) — pointy-top, center (122,100), r_out=48, r_in=28 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#7B3FE4"/>
+  <!-- Two interlocked hexagonal rings (chain link / POL logo) -->
+  <!-- Right hexagon ring: center (58,45), r_out=22, r_in=13, pointy-top -->
   <path fill="white" fill-rule="evenodd"
-    d="M122,52 L163,76 L163,124 L122,148 L81,124 L81,76 Z
-       M122,72 L147,86 L147,114 L122,128 L97,114 L97,86 Z"/>
-  <!-- Left hexagon ring (clipped visually to left side by clip-path) -->
-  <defs>
-    <clipPath id="lclip">
-      <rect x="0" y="0" width="106" height="200"/>
-    </clipPath>
-  </defs>
-  <g clip-path="url(#lclip)">
-    <path fill="white" fill-rule="evenodd"
-      d="M78,52 L119,76 L119,124 L78,148 L37,124 L37,76 Z
-         M78,72 L103,86 L103,114 L78,128 L53,114 L53,86 Z"/>
-  </g>
+    d="M58,23 L77,34 L77,56 L58,67 L39,56 L39,34 Z
+       M58,32 L69,39 L69,51 L58,58 L47,51 L47,39 Z"/>
+  <!-- Left hexagon C-shape: center (42,55), clipped at x<=47 (manually computed) -->
+  <!-- Outer clipped: (47,36)→(42,33)→(23,44)→(23,66)→(42,77)→(47,74) close with vertical x=47 -->
+  <!-- Inner clipped: (47,45)→(42,42)→(31,49)→(31,61)→(42,68)→(47,65) close with vertical x=47 -->
+  <path fill="white" fill-rule="evenodd"
+    d="M47,36 L42,33 L23,44 L23,66 L42,77 L47,74 Z
+       M47,45 L42,42 L31,49 L31,61 L42,68 L47,65 Z"/>
 </svg>
