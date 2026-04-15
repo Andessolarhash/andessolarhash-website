@@ -489,7 +489,7 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
         <!-- USDC -->
         <button class="pmethod-card" id="pchoose-usdc">
           <div class="pmethod-icon-wrap usdc">
-            <img src="/images/tokens/usdc.svg" width="28" height="28" alt="USDC" style="border-radius:50%;" />
+            <img src="/images/tokens/usdc.svg" width="44" height="44" alt="USDC" />
           </div>
           <div class="pmethod-info">
             <div class="pmethod-name">Pagar con USDC <span class="pmethod-rec">Recomendado</span></div>
@@ -500,7 +500,7 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
         <!-- POL -->
         <button class="pmethod-card" id="pchoose-pol">
           <div class="pmethod-icon-wrap pol">
-            <img src="/images/tokens/pol.svg" width="26" height="26" alt="POL" style="border-radius:5px;" />
+            <img src="/images/tokens/pol.svg" width="44" height="44" alt="POL" />
           </div>
           <div class="pmethod-info">
             <div class="pmethod-name">Pagar con POL</div>
@@ -607,7 +607,7 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
       <div id="ppay-usdc-box" class="ppay-opt" style="display:none;">
         <div class="ppay-opt-head">
           <div class="ppay-logo usdc">
-            <img src="/images/tokens/usdc.svg" width="32" height="32" alt="USDC" style="border-radius:50%;" />
+            <img src="/images/tokens/usdc.svg" width="44" height="44" alt="USDC" />
           </div>
           <div><p class="ppay-name">Pagar con USDC</p><p class="ppay-desc">60 USDC · Polygon</p></div>
           <span class="ppay-badge">Recomendado</span>
@@ -620,7 +620,7 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
       <div id="ppay-pol-box" class="ppay-opt" style="display:none;">
         <div class="ppay-opt-head">
           <div class="ppay-logo pol">
-            <img src="/images/tokens/pol.svg" width="30" height="30" alt="POL" style="border-radius:6px;" />
+            <img src="/images/tokens/pol.svg" width="44" height="44" alt="POL" />
           </div>
           <div><p class="ppay-name">Pagar con POL</p><p class="ppay-desc" id="ppol-desc">Calculando…</p></div>
         </div>
@@ -741,17 +741,33 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
 
   // ── POL price (CoinGecko for display, contract for actual amount) ────────
   async function fetchPolPrice() {
+    var el = document.getElementById('pol-choose-desc');
     try {
       var r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd', { signal: AbortSignal.timeout(6000) });
       if (!r.ok) throw new Error();
       var data = await r.json();
       var polUSD = data['matic-network']?.usd;
-      if (polUSD) {
+      if (polUSD && el) {
         var polAmt = (60 / polUSD).toFixed(2);
-        var el = document.getElementById('pol-choose-desc');
-        if (el) el.textContent = '≈ ' + polAmt + ' POL · $60 USD';
+        el.textContent = '≈ ' + polAmt + ' POL · $60 USD';
+        return;
       }
     } catch(_) {}
+    // Fallback: precio aproximado POL desde contrato
+    try {
+      var res = await fetch(POLYGON_RPC, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({jsonrpc:'2.0',method:'eth_call',
+          params:[{to:CONTRACT_V2, data:'0x8c7408c4'+'0000000000000000000000000000000000000000000000000000000003938700'},'latest'],id:9})
+      });
+      var json = await res.json();
+      if (json.result && json.result !== '0x') {
+        var pol = Number(BigInt(json.result)) / 1e18;
+        if (el) el.textContent = '≈ ' + pol.toFixed(2) + ' POL · $60 USD';
+        return;
+      }
+    } catch(_) {}
+    if (el) el.textContent = '≈ precio POL · $60 USD';
   }
   async function loadPolPrice() {
     try {
@@ -1048,10 +1064,11 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
   .pmethod-list { display:flex; flex-direction:column; gap:10px; }
   .pmethod-card { display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.09); border-radius:14px; padding:14px 16px; cursor:pointer; text-align:left; transition:all 0.18s; width:100%; }
   .pmethod-card:hover { border-color:rgba(247,173,31,0.4); background:rgba(247,173,31,0.04); transform:translateX(2px); }
-  .pmethod-icon-wrap { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .pmethod-icon-wrap.usdc { background:rgba(39,117,202,0.15); border:1.5px solid rgba(39,117,202,0.35); }
-  .pmethod-icon-wrap.pol  { background:rgba(130,71,229,0.15); border:1.5px solid rgba(130,71,229,0.35); }
+  .pmethod-icon-wrap { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; }
+  .pmethod-icon-wrap.usdc { background:none; border:none; }
+  .pmethod-icon-wrap.pol  { background:none; border:none; }
   .pmethod-icon-wrap.clp  { background:rgba(247,173,31,0.12); border:1.5px solid rgba(247,173,31,0.35); }
+  .pmethod-icon-wrap img  { width:44px; height:44px; object-fit:cover; display:block; }
   .pmethod-info { flex:1; }
   .pmethod-name { font-family:'Maven Pro',sans-serif; font-size:14px; font-weight:700; color:#fff; }
   .pmethod-detail { font-family:'Archivo',sans-serif; font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px; }
@@ -1062,9 +1079,8 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
   /* PAYMENT */
   .ppay-opt { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px; }
   .ppay-opt-head { display:flex; align-items:center; gap:12px; }
-  .ppay-logo { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .ppay-logo.usdc { background:rgba(39,117,202,0.15); border:1.5px solid rgba(39,117,202,0.35); }
-  .ppay-logo.pol  { background:rgba(130,71,229,0.15); border:1.5px solid rgba(130,71,229,0.35); }
+  .ppay-logo { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; background:none; border:none; }
+  .ppay-logo img { width:44px; height:44px; object-fit:cover; display:block; border-radius:50%; }
   .ppay-name { font-family:'Maven Pro',sans-serif; font-size:14px; font-weight:700; color:#fff; }
   .ppay-desc { font-family:'Archivo',sans-serif; font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px; }
   .ppay-badge { margin-left:auto; padding:2px 8px; border-radius:999px; font-size:9px; font-family:'Archivo',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.3); color:#4ade80; }
