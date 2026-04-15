@@ -1,0 +1,786 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Comprar Minero S21+ NFT | Andes Solar Hash"
+  description="Adquiere tu fracción tokenizada del Antminer S21+ de Andes Solar Hash. Paga con USDC, POL o pesos chilenos (CLP)."
+  noindex={false}
+>
+<div class="buy-page">
+
+  <!-- HERO -->
+  <section class="buy-hero">
+    <div class="buy-hero-inner">
+      <div class="ash-badge">
+        <span class="ash-badge-dot"></span>
+        <span>COLECCIÓN ACTIVA · POLYGON</span>
+      </div>
+      <h1>Adquiere tu <span class="gold-text">Minero S21+</span></h1>
+      <p class="hero-sub">Fracción tokenizada de hashrate real. Energía competitiva internacional, gestión local en Chile.</p>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <section class="buy-main">
+
+    <!-- LEFT: NFT CARD -->
+    <div class="nft-preview">
+      <div class="nft-card">
+        <img
+          src="https://teal-characteristic-lamprey-920.mypinata.cloud/ipfs/bafybeidrq5fa22kwj77ogw4wl6xq7jjclinrnrlgq7tojcq2dadosp2h5a"
+          alt="Minero S21+ Andes Solar Hash NFT"
+          class="nft-img"
+        />
+        <div class="nft-card-body">
+          <div class="nft-collection-badge">Andes Solar Hash · Colección S21+</div>
+          <h2 class="nft-name">Minero S21+</h2>
+          <div class="nft-price-row">
+            <span class="nft-price">$60 USD</span>
+            <span class="nft-price-sub">por fracción</span>
+          </div>
+          <div class="nft-specs">
+            <div class="spec-row"><span class="spec-label">Modelo</span><span class="spec-val">Antminer S21+</span></div>
+            <div class="spec-row"><span class="spec-label">Potencia</span><span class="spec-val">234 TH/s</span></div>
+            <div class="spec-row"><span class="spec-label">Eficiencia</span><span class="spec-val">17.5 J/TH</span></div>
+            <div class="spec-row"><span class="spec-label">Activo</span><span class="spec-val">Bitcoin (BTC)</span></div>
+            <div class="spec-row"><span class="spec-label">Red</span><span class="spec-val">Polygon (ERC-1155)</span></div>
+            <div class="spec-row"><span class="spec-label">Royalty</span><span class="spec-val">5%</span></div>
+          </div>
+          <div class="nft-supply" id="supply-info">
+            <span class="supply-dot"></span>
+            <span id="supply-text">Cargando disponibilidad…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div class="info-mini-cards">
+        <div class="info-mini">
+          <span class="info-mini-icon">⚡</span>
+          <div>
+            <p class="info-mini-title">Hashrate real</p>
+            <p class="info-mini-sub">Fracción de equipo físico operativo</p>
+          </div>
+        </div>
+        <div class="info-mini">
+          <span class="info-mini-icon">💰</span>
+          <div>
+            <p class="info-mini-title">Márgenes operativos</p>
+            <p class="info-mini-sub">Pagos periódicos en USDC o CLP</p>
+          </div>
+        </div>
+        <div class="info-mini">
+          <span class="info-mini-icon">🔒</span>
+          <div>
+            <p class="info-mini-title">On-chain verificable</p>
+            <p class="info-mini-sub">Propiedad en Polygon, auditable 24/7</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: PURCHASE FLOW -->
+    <div class="purchase-card" id="purchase-card">
+
+      <!-- STEPS -->
+      <div class="steps">
+        <div class="step active" id="step-dot-1"><span>1</span><span class="step-label">Wallet</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-2"><span>2</span><span class="step-label">Datos</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-3"><span>3</span><span class="step-label">Pago</span></div>
+      </div>
+
+      <!-- PANEL 1: CONNECT -->
+      <div id="panel-connect" class="panel active">
+        <div class="panel-icon">🔗</div>
+        <h2 class="panel-title">Conecta tu wallet</h2>
+        <p class="panel-sub">Necesitamos tu dirección para enviarte el NFT y verificar el pago en blockchain.</p>
+        <button id="btn-connect" class="btn-primary btn-large">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
+          Conectar Wallet
+        </button>
+        <p class="note">Compatible con MetaMask, WalletConnect, Coinbase Wallet y 300+ wallets.</p>
+      </div>
+
+      <!-- PANEL 2: KYC FORM -->
+      <div id="panel-kyc" class="panel">
+        <div class="form-header">
+          <div class="wallet-chip" id="kyc-wallet"></div>
+          <button id="btn-disconnect" type="button" class="btn-disconnect">Cambiar wallet</button>
+        </div>
+        <h2 class="panel-title">Datos para la boleta</h2>
+        <p class="panel-sub">Requeridos para cumplimiento tributario y emisión de boleta/factura.</p>
+
+        <form id="kyc-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f-nombre">Nombre completo <span class="req">*</span></label>
+              <input type="text" id="f-nombre" name="nombre" placeholder="Juan Pérez González" required autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="f-email">Correo electrónico <span class="req">*</span></label>
+              <input type="email" id="f-email" name="email" placeholder="correo@ejemplo.com" required autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="f-pais">País de residencia <span class="req">*</span></label>
+            <select id="f-pais" name="pais" required>
+              <option value="">— Seleccione su país —</option>
+              <option value="Chile" selected>Chile</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Colombia">Colombia</option>
+              <option value="México">México</option>
+              <option value="Perú">Perú</option>
+              <option value="Uruguay">Uruguay</option>
+              <option value="Brasil">Brasil</option>
+              <option value="España">España</option>
+              <option value="Estados Unidos">Estados Unidos</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="group-rut">
+            <label for="f-rut">RUT <span class="req">*</span></label>
+            <input type="text" id="f-rut" name="rut" placeholder="12.345.678-9" autocomplete="off" />
+          </div>
+
+          <div class="form-group hidden" id="group-taxid">
+            <label for="f-taxid">Tax ID / Número tributario</label>
+            <input type="text" id="f-taxid" name="tax_id" placeholder="NIF, CUIT, CPF, SSN…" autocomplete="off" />
+            <span class="field-hint">Opcional según país</span>
+          </div>
+
+          <div class="form-group">
+            <label for="f-direccion">Dirección <span class="req">*</span></label>
+            <input type="text" id="f-direccion" name="direccion" placeholder="Calle, número, ciudad, país" required autocomplete="street-address" />
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="f-terms" required />
+            <label for="f-terms">Acepto los <a href="/legal/terminos-nft/" target="_blank">Términos y Condiciones</a> y la <a href="/legal/privacidad/" target="_blank">Política de Privacidad</a></label>
+          </div>
+
+          <button type="submit" id="btn-kyc-next" class="btn-primary btn-large btn-full">
+            Continuar al pago →
+          </button>
+          <div id="kyc-error" class="form-error hidden"></div>
+        </form>
+      </div>
+
+      <!-- PANEL 3: PAYMENT -->
+      <div id="panel-payment" class="panel">
+        <div class="form-header">
+          <div class="wallet-chip" id="pay-wallet"></div>
+          <button id="btn-back-kyc" type="button" class="btn-disconnect">← Volver</button>
+        </div>
+        <h2 class="panel-title">Elige cómo pagar</h2>
+        <p class="panel-sub">1 × Minero S21+ NFT — <strong style="color:#f7ad1f;">$60 USD</strong></p>
+
+        <div class="payment-options">
+
+          <!-- USDC -->
+          <div class="payment-option" id="opt-usdc">
+            <div class="payment-option-header">
+              <div class="payment-logo usdc-logo">USDC</div>
+              <div>
+                <p class="payment-name">Pagar con USDC</p>
+                <p class="payment-desc">60 USDC · Polygon · Sin comisión adicional</p>
+              </div>
+              <span class="payment-badge recommended">Recomendado</span>
+            </div>
+            <button id="btn-pay-usdc" class="btn-primary btn-full" style="margin-top:16px;">
+              Comprar con USDC
+            </button>
+            <p class="pay-note">Necesitas aprobar el gasto de USDC primero (2 transacciones)</p>
+          </div>
+
+          <!-- POL -->
+          <div class="payment-option" id="opt-pol">
+            <div class="payment-option-header">
+              <div class="payment-logo pol-logo">POL</div>
+              <div>
+                <p class="payment-name">Pagar con POL</p>
+                <p class="payment-desc" id="pol-price-desc">Calculando precio…</p>
+              </div>
+            </div>
+            <button id="btn-pay-pol" class="btn-ghost btn-full" style="margin-top:16px;">
+              Comprar con POL
+            </button>
+            <p class="pay-note">Precio calculado en tiempo real vía Chainlink oracle</p>
+          </div>
+
+          <!-- CLP / Flow -->
+          <div class="payment-option" id="opt-clp">
+            <div class="payment-option-header">
+              <div class="payment-logo clp-logo">CLP</div>
+              <div>
+                <p class="payment-name">Pagar con Pesos Chilenos</p>
+                <p class="payment-desc">Webpay, transferencia · Vía Flow</p>
+              </div>
+            </div>
+            <button id="btn-pay-clp" class="btn-ghost btn-full" style="margin-top:16px;">
+              Pagar en CLP →
+            </button>
+            <p class="pay-note">Serás redirigido a Flow para completar el pago. El NFT se enviará a tu wallet en 24-48 hrs.</p>
+          </div>
+
+        </div>
+        <div id="pay-error" class="form-error hidden"></div>
+      </div>
+
+      <!-- PANEL: PROCESSING -->
+      <div id="panel-processing" class="panel">
+        <div class="panel-icon spin-icon">⟳</div>
+        <h2 class="panel-title" id="processing-title">Procesando…</h2>
+        <p class="panel-sub" id="processing-sub">Por favor espera y no cierres esta ventana.</p>
+        <div class="tx-steps" id="tx-steps"></div>
+      </div>
+
+      <!-- PANEL: SUCCESS -->
+      <div id="panel-success" class="panel">
+        <div class="success-icon">✓</div>
+        <h2 class="panel-title">¡NFT adquirido!</h2>
+        <p class="panel-sub">Tu Minero S21+ ha sido acuñado en tu wallet. Ya eres holder oficial de Andes Solar Hash.</p>
+        <div class="success-box">
+          <p class="success-box-title">Próximos pasos</p>
+          <ul class="success-steps">
+            <li>📧 Recibirás un email con los detalles de tu boleta</li>
+            <li>💬 Únete al Discord privado de holders</li>
+            <li>📊 Reportes de operación cada semana</li>
+          </ul>
+          <a href="https://discord.gg/2W9aTR52" target="_blank" rel="noopener noreferrer" class="btn-primary" style="margin-top:16px;width:100%;justify-content:center;">
+            Unirse al Discord de Holders
+          </a>
+        </div>
+        <div id="tx-hash-box" class="tx-hash-box hidden"></div>
+      </div>
+
+      <!-- PANEL: CLP PENDING -->
+      <div id="panel-clp-pending" class="panel">
+        <div class="panel-icon">⏳</div>
+        <h2 class="panel-title">Pago en proceso</h2>
+        <p class="panel-sub">Completaste el pago con CLP. El equipo de Andes Solar Hash enviará tu NFT a la wallet conectada en un plazo de <strong>24-48 horas hábiles</strong>.</p>
+        <div class="success-box">
+          <p class="success-box-title">Tu wallet registrada</p>
+          <div class="wallet-chip" id="clp-wallet" style="margin-top:8px;"></div>
+        </div>
+        <a href="mailto:soporte@andessolarhash.com" class="btn-ghost" style="margin-top:16px;width:100%;justify-content:center;display:flex;">
+          Contactar soporte
+        </a>
+      </div>
+
+    </div><!-- /.purchase-card -->
+  </section>
+</div>
+</Layout>
+
+<script is:inline type="module">
+(function () {
+
+  // ── Constantes ────────────────────────────────────────────────────────────
+  var CONTRACT_V2  = '0x40D9a1FDec62795723f065b05f792A6159727864';
+  var USDC_ADDRESS = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359';
+  var COLLECTION_ID = 1;
+  var PRICE_USDC   = 60_000_000n; // 60 USDC (6 decimals)
+  var WEBHOOK      = 'https://hook.us2.make.com/2k9vtp93xg5el54q1tkndmeyhpveapnf';
+  var POLYGON_RPC  = 'https://polygon-bor-rpc.publicnode.com';
+
+  // ABIs mínimos
+  var ASH_ABI = [
+    'function mintWithUSDC(uint256 collectionId, uint256 amount)',
+    'function mintWithPOL(uint256 collectionId, uint256 amount) payable',
+    'function getPolAmount(uint256 usdcAmount) view returns (uint256)',
+    'function collections(uint256) view returns (uint256 maxSupply, uint256 currentSupply, uint256 priceUSDC, string uri, bool paused, uint96 royaltyBps)',
+  ];
+  var ERC20_ABI = [
+    'function approve(address spender, uint256 amount) returns (bool)',
+    'function allowance(address owner, address spender) view returns (uint256)',
+    'function balanceOf(address) view returns (uint256)',
+  ];
+
+  // ── Estado ────────────────────────────────────────────────────────────────
+  var connectedWallet = null;
+  var kycData = {};
+  var _modal = null;
+  var _ethers = null;
+
+  // ── UI helpers ────────────────────────────────────────────────────────────
+  function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    var el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  function setStep(n) {
+    for (var i = 1; i <= 3; i++) {
+      var dot = document.getElementById('step-dot-' + i);
+      if (!dot) continue;
+      dot.classList.remove('active','done');
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+  }
+
+  function setWalletChip(id, addr) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = addr.slice(0,6) + '…' + addr.slice(-4);
+  }
+
+  function setTxStep(msg, done) {
+    var el = document.getElementById('tx-steps');
+    if (!el) return;
+    var div = document.createElement('div');
+    div.className = 'tx-step' + (done ? ' done' : ' pending');
+    div.textContent = (done ? '✓ ' : '⟳ ') + msg;
+    el.appendChild(div);
+  }
+
+  function clearTxSteps() {
+    var el = document.getElementById('tx-steps');
+    if (el) el.innerHTML = '';
+  }
+
+  // ── Cargar supply desde RPC ───────────────────────────────────────────────
+  async function loadSupply() {
+    try {
+      var selector = '0x62a5af3b'; // collections(uint256)
+      var paddedId = COLLECTION_ID.toString(16).padStart(64,'0');
+      var res = await fetch(POLYGON_RPC, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc:'2.0', method:'eth_call',
+          params: [{ to: CONTRACT_V2, data: '0x62a5af3b' + paddedId }, 'latest'], id: 1 })
+      });
+      var json = await res.json();
+      if (json.result && json.result.length > 2) {
+        var hex = json.result.slice(2);
+        var maxSupply     = parseInt(hex.slice(0, 64), 16);
+        var currentSupply = parseInt(hex.slice(64,128), 16);
+        var available     = maxSupply - currentSupply;
+        document.getElementById('supply-text').textContent =
+          available + ' de ' + maxSupply + ' disponibles';
+        document.querySelector('.supply-dot').style.background = available > 10 ? '#4ade80' : '#f7ad1f';
+      }
+    } catch(_) {
+      document.getElementById('supply-text').textContent = '100 disponibles';
+    }
+  }
+
+  // ── Cargar precio en POL ──────────────────────────────────────────────────
+  async function loadPolPrice() {
+    try {
+      // getPolAmount(uint256) selector: 0x8c7408c4
+      var paddedAmount = '0000000000000000000000000000000000000000000000000000000003938700'; // 60 USDC
+      var res = await fetch(POLYGON_RPC, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc:'2.0', method:'eth_call',
+          params: [{ to: CONTRACT_V2, data: '0x8c7408c4' + paddedAmount }, 'latest'], id: 2 })
+      });
+      var json = await res.json();
+      if (json.result && json.result !== '0x') {
+        var polWei = BigInt(json.result);
+        var polNum = Number(polWei) / 1e18;
+        document.getElementById('pol-price-desc').textContent =
+          polNum.toFixed(2) + ' POL · ≈$60 USD · Polygon';
+      }
+    } catch(_) {
+      document.getElementById('pol-price-desc').textContent = '≈ equivalente a $60 USD en POL';
+    }
+  }
+
+  // ── AppKit init ───────────────────────────────────────────────────────────
+  var btnConnect = document.getElementById('btn-connect');
+  btnConnect.disabled = true;
+  btnConnect.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Cargando…';
+
+  Promise.all([
+    import('https://esm.sh/@reown/appkit@1.7.7?bundle'),
+    import('https://esm.sh/@reown/appkit-adapter-ethers@1.7.7?bundle'),
+    import('https://esm.sh/ethers@6.13.0?bundle'),
+  ]).then(function(mods) {
+    var createAppKit  = mods[0].createAppKit;
+    var EthersAdapter = mods[1].EthersAdapter;
+    _ethers = mods[2];
+
+    var polygon = {
+      id: 137, caipNetworkId: 'eip155:137', chainNamespace: 'eip155',
+      name: 'Polygon',
+      nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
+      rpcUrls: { default: { http: [POLYGON_RPC] } },
+      blockExplorers: { default: { name: 'PolygonScan', url: 'https://polygonscan.com' } }
+    };
+
+    var modal = createAppKit({
+      adapters: [new EthersAdapter()],
+      networks: [polygon],
+      defaultNetwork: polygon,
+      projectId: '5ad962d1ec9b99a4e42bd27b2cbabb96',
+      metadata: {
+        name: 'Andes Solar Hash',
+        description: 'Compra tu NFT Minero S21+',
+        url: 'https://andessolarhash.com',
+        icons: ['https://andessolarhash.com/favicon.svg']
+      },
+      features: { analytics: false, email: false, socials: [] }
+    });
+
+    _modal = modal;
+    btnConnect.disabled = false;
+    btnConnect.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg> Conectar Wallet';
+
+    modal.subscribeAccount(function(state) {
+      if (state.isConnected && state.address && !connectedWallet) {
+        connectedWallet = state.address;
+        try { modal.close(); } catch(_) {}
+        setWalletChip('kyc-wallet', connectedWallet);
+        setWalletChip('pay-wallet', connectedWallet);
+        showPanel('panel-kyc');
+        setStep(2);
+      }
+      if (!state.isConnected) { connectedWallet = null; }
+    });
+
+    btnConnect.addEventListener('click', function() { modal.open({ view: 'Connect' }); });
+  }).catch(function(err) {
+    btnConnect.disabled = false;
+    btnConnect.innerHTML = 'Conectar Wallet';
+    console.warn('AppKit error:', err);
+  });
+
+  // ── Desconectar ───────────────────────────────────────────────────────────
+  document.getElementById('btn-disconnect').addEventListener('click', function() {
+    connectedWallet = null;
+    if (_modal) _modal.disconnect().catch(function(){});
+    showPanel('panel-connect');
+    setStep(1);
+  });
+
+  document.getElementById('btn-back-kyc').addEventListener('click', function() {
+    showPanel('panel-kyc');
+    setStep(2);
+  });
+
+  // ── País toggle ───────────────────────────────────────────────────────────
+  function updateKycFields() {
+    var isChile = document.getElementById('f-pais').value === 'Chile';
+    document.getElementById('group-rut').classList.toggle('hidden', !isChile);
+    document.getElementById('group-taxid').classList.toggle('hidden', isChile);
+    document.getElementById('f-rut').required = isChile;
+  }
+  document.getElementById('f-pais').addEventListener('change', updateKycFields);
+  updateKycFields();
+
+  // ── KYC form submit ───────────────────────────────────────────────────────
+  document.getElementById('kyc-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var errEl = document.getElementById('kyc-error');
+    errEl.classList.add('hidden');
+    if (!this.checkValidity()) { this.reportValidity(); return; }
+
+    var pais = document.getElementById('f-pais').value;
+    var isChile = pais === 'Chile';
+    kycData = {
+      wallet:    connectedWallet,
+      nombre:    document.getElementById('f-nombre').value.trim(),
+      email:     document.getElementById('f-email').value.trim(),
+      pais:      pais,
+      rutTaxId:  isChile ? document.getElementById('f-rut').value.trim() : document.getElementById('f-taxid').value.trim(),
+      direccion: document.getElementById('f-direccion').value.trim(),
+      source:    'compra-nft'
+    };
+
+    setWalletChip('pay-wallet', connectedWallet);
+    loadPolPrice();
+    showPanel('panel-payment');
+    setStep(3);
+  });
+
+  // ── Pago con USDC ─────────────────────────────────────────────────────────
+  document.getElementById('btn-pay-usdc').addEventListener('click', async function() {
+    if (!connectedWallet || !_ethers || !_modal) return;
+
+    showPanel('panel-processing');
+    document.getElementById('processing-title').textContent = 'Comprando con USDC…';
+    clearTxSteps();
+
+    try {
+      var walletProvider = _modal.getWalletProvider();
+      var provider = new _ethers.BrowserProvider(walletProvider);
+      var signer   = await provider.getSigner();
+
+      var usdc = new _ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
+      var nft  = new _ethers.Contract(CONTRACT_V2, ASH_ABI, signer);
+
+      // Verificar balance USDC
+      var balance = await usdc.balanceOf(connectedWallet);
+      if (balance < PRICE_USDC) {
+        throw new Error('Saldo USDC insuficiente. Necesitas al menos 60 USDC en tu wallet Polygon.');
+      }
+
+      // Paso 1: Approve
+      var allowance = await usdc.allowance(connectedWallet, CONTRACT_V2);
+      if (allowance < PRICE_USDC) {
+        document.getElementById('processing-sub').textContent = 'Aprueba el gasto de 60 USDC en tu wallet…';
+        setTxStep('Aprobando 60 USDC…', false);
+        var approveTx = await usdc.approve(CONTRACT_V2, PRICE_USDC);
+        await approveTx.wait();
+        document.getElementById('tx-steps').lastChild.className = 'tx-step done';
+        document.getElementById('tx-steps').lastChild.textContent = '✓ USDC aprobado';
+      }
+
+      // Paso 2: Mint
+      document.getElementById('processing-sub').textContent = 'Confirma la compra en tu wallet…';
+      setTxStep('Acuñando NFT…', false);
+      var mintTx = await nft.mintWithUSDC(COLLECTION_ID, 1);
+      await mintTx.wait();
+      document.getElementById('tx-steps').lastChild.className = 'tx-step done';
+      document.getElementById('tx-steps').lastChild.textContent = '✓ NFT acuñado';
+
+      await sendWebhook(mintTx.hash, 'USDC');
+      showSuccess(mintTx.hash);
+
+    } catch(err) {
+      var msg = err?.reason || err?.message || 'Error en la transacción';
+      document.getElementById('pay-error').textContent = msg;
+      document.getElementById('pay-error').classList.remove('hidden');
+      showPanel('panel-payment');
+    }
+  });
+
+  // ── Pago con POL ──────────────────────────────────────────────────────────
+  document.getElementById('btn-pay-pol').addEventListener('click', async function() {
+    if (!connectedWallet || !_ethers || !_modal) return;
+
+    showPanel('panel-processing');
+    document.getElementById('processing-title').textContent = 'Comprando con POL…';
+    clearTxSteps();
+
+    try {
+      var walletProvider = _modal.getWalletProvider();
+      var provider = new _ethers.BrowserProvider(walletProvider);
+      var signer   = await provider.getSigner();
+      var nft      = new _ethers.Contract(CONTRACT_V2, ASH_ABI, signer);
+
+      // Obtener precio POL del contrato
+      var polRequired = await nft.getPolAmount(PRICE_USDC);
+      var polWithSlippage = polRequired * 102n / 100n; // +2% slippage
+
+      // Verificar balance POL
+      var balance = await provider.getBalance(connectedWallet);
+      if (balance < polWithSlippage) {
+        throw new Error('Saldo POL insuficiente. Necesitas ≈' + (Number(polRequired) / 1e18).toFixed(2) + ' POL en tu wallet.');
+      }
+
+      document.getElementById('processing-sub').textContent = 'Confirma la transacción en tu wallet…';
+      setTxStep('Acuñando NFT con POL…', false);
+
+      var mintTx = await nft.mintWithPOL(COLLECTION_ID, 1, { value: polWithSlippage });
+      await mintTx.wait();
+      document.getElementById('tx-steps').lastChild.className = 'tx-step done';
+      document.getElementById('tx-steps').lastChild.textContent = '✓ NFT acuñado';
+
+      await sendWebhook(mintTx.hash, 'POL');
+      showSuccess(mintTx.hash);
+
+    } catch(err) {
+      var msg = err?.reason || err?.message || 'Error en la transacción';
+      document.getElementById('pay-error').textContent = msg;
+      document.getElementById('pay-error').classList.remove('hidden');
+      showPanel('panel-payment');
+    }
+  });
+
+  // ── Pago con CLP (Flow) ───────────────────────────────────────────────────
+  document.getElementById('btn-pay-clp').addEventListener('click', async function() {
+    if (!connectedWallet) return;
+
+    // Guardar datos KYC + wallet en Airtable via Make antes del redirect
+    try {
+      await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...kycData, metodoPago: 'CLP-Flow', estado: 'Pendiente pago' })
+      });
+    } catch(_) {}
+
+    // Mostrar panel de pendiente (Flow redirect se configurará con las credenciales de Flow)
+    setWalletChip('clp-wallet', connectedWallet);
+    showPanel('panel-clp-pending');
+    window.location.href = 'https://www.flow.cl/btn.php?token=w29c50be5a01ae9ff8a5aee1bf58378a9f2d40f2';
+  });
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  async function sendWebhook(txHash, method) {
+    try {
+      await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...kycData, metodoPago: method, txHash: txHash, estado: 'Completado' })
+      });
+    } catch(_) {}
+  }
+
+  function showSuccess(txHash) {
+    showPanel('panel-success');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (txHash) {
+      var box = document.getElementById('tx-hash-box');
+      box.innerHTML = '<p class="tx-label">Hash de transacción</p><a href="https://polygonscan.com/tx/' + txHash + '" target="_blank" class="tx-link">' + txHash.slice(0,18) + '…' + txHash.slice(-6) + ' ↗</a>';
+      box.classList.remove('hidden');
+    }
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  loadSupply();
+
+})();
+</script>
+
+<style>
+  .buy-page { background: #0b0d1b; min-height: 100vh; }
+
+  /* HERO */
+  .buy-hero {
+    background: linear-gradient(to bottom, #111428, #0b0d1b);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 120px 32px 56px;
+    text-align: center;
+  }
+  .buy-hero-inner { max-width: 680px; margin: 0 auto; }
+  .ash-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(247,173,31,0.35); border-radius: 9999px;
+    padding: 6px 16px; font-family: 'Maven Pro', sans-serif;
+    font-size: 11px; font-weight: 700; color: #f7ad1f;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px;
+  }
+  .ash-badge-dot { width: 6px; height: 6px; background: #f7ad1f; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .buy-hero h1 { font-family: 'Maven Pro', sans-serif; font-size: clamp(32px,5vw,52px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 16px; }
+  .gold-text { background: linear-gradient(135deg,#e08324,#f7ad1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-family: 'Archivo', sans-serif; font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 520px; margin: 0 auto; }
+
+  /* MAIN LAYOUT */
+  .buy-main { max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 420px 1fr; gap: 40px; align-items: start; }
+
+  /* NFT PREVIEW */
+  .nft-card { background: #111428; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+  .nft-img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  .nft-card-body { padding: 24px; }
+  .nft-collection-badge { font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .nft-name { font-family: 'Maven Pro', sans-serif; font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 12px; }
+  .nft-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px; }
+  .nft-price { font-family: 'Maven Pro', sans-serif; font-size: 36px; font-weight: 900; color: #f7ad1f; }
+  .nft-price-sub { font-family: 'Archivo', sans-serif; font-size: 14px; color: rgba(255,255,255,0.4); }
+  .nft-specs { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .spec-row { display: flex; justify-content: space-between; align-items: center; }
+  .spec-label { font-family: 'Archivo', sans-serif; font-size: 12px; color: rgba(255,255,255,0.35); }
+  .spec-val { font-family: 'Archivo', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.75); }
+  .nft-supply { display: flex; align-items: center; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.07); }
+  .supply-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+  .nft-supply span:last-child { font-family: 'Archivo', sans-serif; font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  /* INFO MINI CARDS */
+  .info-mini-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .info-mini { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 14px 16px; }
+  .info-mini-icon { font-size: 22px; flex-shrink: 0; }
+  .info-mini-title { font-family: 'Maven Pro', sans-serif; font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .info-mini-sub { font-family: 'Archivo', sans-serif; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* PURCHASE CARD */
+  .purchase-card { background: #111428; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 40px; }
+
+  /* STEPS */
+  .steps { display: flex; align-items: center; margin-bottom: 40px; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .step span:first-child { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-family: 'Maven Pro', sans-serif; font-weight: 700; font-size: 14px; color: rgba(255,255,255,0.3); transition: all 0.3s; }
+  .step-label { font-size: 11px; color: rgba(255,255,255,0.25); font-family: 'Archivo', sans-serif; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .step.active span:first-child { border-color: #f7ad1f; color: #f7ad1f; background: rgba(247,173,31,0.1); }
+  .step.active .step-label { color: #f7ad1f; }
+  .step.done span:first-child { border-color: #4ade80; background: rgba(74,222,128,0.1); color: #4ade80; }
+  .step.done .step-label { color: #4ade80; }
+  .step-line { flex: 1; height: 2px; background: rgba(255,255,255,0.07); margin: 0 8px; margin-bottom: 20px; }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-icon { font-size: 40px; margin-bottom: 16px; line-height: 1; }
+  .spin-icon { display: inline-block; animation: spin 1.2s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .panel-title { font-family: 'Maven Pro', sans-serif; font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+  .panel-sub { font-family: 'Archivo', sans-serif; font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 28px; }
+  .note { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 16px; font-family: 'Archivo', sans-serif; line-height: 1.6; }
+
+  /* BUTTONS */
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #f7ad1f; color: #0b0d1b; font-family: 'Maven Pro', sans-serif; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+  .btn-primary:hover { background: #ffc44d; }
+  .btn-primary:disabled { background: rgba(247,173,31,0.3); cursor: not-allowed; }
+  .btn-large { min-height: 52px; font-size: 14px; padding: 14px 32px; }
+  .btn-full { width: 100%; }
+  .btn-ghost { display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); font-family: 'Maven Pro', sans-serif; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+  .btn-disconnect { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+  .btn-disconnect:hover { border-color: #f7ad1f; color: #f7ad1f; }
+
+  /* WALLET CHIP */
+  .wallet-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 4px 14px; font-family: 'Archivo', monospace; font-size: 13px; color: rgba(255,255,255,0.5); }
+  .wallet-chip::before { content: ''; width: 8px; height: 8px; background: #4ade80; border-radius: 50%; }
+  .form-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+  /* FORM */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .form-group label { font-family: 'Archivo', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.65); }
+  .req { color: #f7ad1f; }
+  .form-group input, .form-group select { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; color: #fff; font-family: 'Archivo', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; width: 100%; }
+  .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+  .form-group input:focus, .form-group select:focus { border-color: rgba(247,173,31,0.5); }
+  .form-group select option { background: #1a1f38; color: #fff; }
+  .field-hint { font-size: 11px; color: rgba(255,255,255,0.25); font-family: 'Archivo', sans-serif; }
+  .hidden { display: none !important; }
+  .form-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; }
+  .form-check input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; accent-color: #f7ad1f; cursor: pointer; margin-top: 2px; }
+  .form-check label { font-family: 'Archivo', sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; cursor: pointer; }
+  .form-check label a { color: #f7ad1f; text-decoration: none; }
+  .form-error { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); color: #ff6b6b; border-radius: 10px; padding: 12px 16px; font-family: 'Archivo', sans-serif; font-size: 13px; margin-top: 12px; }
+
+  /* PAYMENT OPTIONS */
+  .payment-options { display: flex; flex-direction: column; gap: 16px; }
+  .payment-option { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; transition: border-color 0.2s; }
+  .payment-option:hover { border-color: rgba(247,173,31,0.3); }
+  .payment-option-header { display: flex; align-items: center; gap: 14px; }
+  .payment-logo { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Maven Pro', sans-serif; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+  .usdc-logo { background: rgba(39,117,202,0.2); color: #2775ca; border: 1px solid rgba(39,117,202,0.3); }
+  .pol-logo { background: rgba(130,71,229,0.2); color: #8247e5; border: 1px solid rgba(130,71,229,0.3); }
+  .clp-logo { background: rgba(247,173,31,0.15); color: #f7ad1f; border: 1px solid rgba(247,173,31,0.3); }
+  .payment-name { font-family: 'Maven Pro', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
+  .payment-desc { font-family: 'Archivo', sans-serif; font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .payment-badge { margin-left: auto; padding: 3px 10px; border-radius: 999px; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .recommended { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+  .pay-note { font-family: 'Archivo', sans-serif; font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 10px; line-height: 1.5; }
+
+  /* TX STEPS */
+  .tx-steps { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .tx-step { font-family: 'Archivo', sans-serif; font-size: 14px; padding: 12px 16px; border-radius: 10px; }
+  .tx-step.pending { background: rgba(247,173,31,0.08); color: #f7ad1f; border: 1px solid rgba(247,173,31,0.2); }
+  .tx-step.done { background: rgba(74,222,128,0.08); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+
+  /* SUCCESS */
+  .success-icon { width: 72px; height: 72px; border-radius: 50%; background: rgba(74,222,128,0.1); border: 2px solid rgba(74,222,128,0.4); color: #4ade80; font-size: 32px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-family: 'Maven Pro', sans-serif; font-weight: 900; }
+  .success-box { background: rgba(247,173,31,0.06); border: 1px solid rgba(247,173,31,0.2); border-radius: 14px; padding: 20px 24px; margin-top: 24px; }
+  .success-box-title { font-family: 'Maven Pro', sans-serif; font-weight: 800; font-size: 13px; color: #f7ad1f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .success-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .success-steps li { font-family: 'Archivo', sans-serif; font-size: 14px; color: rgba(255,255,255,0.6); }
+  .tx-hash-box { margin-top: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 16px; }
+  .tx-label { font-family: 'Archivo', sans-serif; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .tx-link { font-family: monospace; font-size: 13px; color: #f7ad1f; text-decoration: none; }
+  .tx-link:hover { text-decoration: underline; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) { .buy-main { grid-template-columns: 1fr; } .nft-preview { max-width: 500px; margin: 0 auto; } }
+  @media (max-width: 600px) { .purchase-card { padding: 24px 20px; } .form-row { grid-template-columns: 1fr; } .buy-hero { padding: 100px 20px 40px; } }
+</style>

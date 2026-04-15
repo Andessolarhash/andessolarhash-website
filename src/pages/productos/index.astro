@@ -335,7 +335,7 @@ const glossary = [
           </h3>
         </div>
         <p class="font-archivo text-base text-white leading-relaxed flex-grow">
-          La clave del margen es el costo operativo. Nuestro servicio de hosting incluye: alojamiento, energía, refrigeración, internet, seguridad y monitoreo 24/7, un uptime mínimo del 96%.
+          La clave del margen es el costo operativo. Nuestro servicio de hosting incluye: alojamiento, energía, refrigeración, internet, seguridad y monitoreo 24/7, un uptime mínimo del 95%.
         </p>
         <a
           href="/hosting/"
@@ -376,40 +376,14 @@ const glossary = [
     </div>
   </section>
 
-  <!-- Newsletter — Figma 92:20 -->
-  <section class="relative py-16 md:py-20 overflow-hidden" style="background: #0b0d1b;">
-    <div class="absolute right-0 top-0 bottom-0 w-full max-w-md opacity-90 mix-blend-lighten pointer-events-none hidden md:block">
-      <img src={imgNewsletter} alt="" class="h-full w-full object-cover object-right" loading="lazy" />
-    </div>
-    <div class="absolute inset-0 bg-gradient-to-r from-[#0b0d1b] from-[55%] to-transparent pointer-events-none" />
-    <div class="relative z-10 max-w-xl mx-auto text-center px-6 md:px-8">
-      <h2
-        class="font-maven font-black text-2xl md:text-[30px] uppercase mb-4"
-        style="background: linear-gradient(to right, #e08324, #f7ad1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"
-      >
-        Reciba información sobre minería de criptomonedas.
-      </h2>
-      <p class="font-archivo text-lg text-white mb-8">
-        Suscríbase y reciba semanalmente análisis de mercado, novedades del sector y oportunidades de minería directamente en su correo.
-      </p>
-      <form
-        id="newsletter-form-cat"
-        class="flex flex-col sm:flex-row gap-3 justify-center items-stretch max-w-md mx-auto"
-      >
-        <input
-          type="email"
-          id="newsletter-email-cat"
-          required
-          placeholder="Su correo electrónico aquí..."
-          class="flex-1 rounded px-4 py-3.5 font-archivo text-base bg-white/10 border border-white/20 text-white placeholder:text-[#6b7280] outline-none focus:border-[#f7ad1f]/50"
-        />
-        <button
-          type="submit"
-          id="newsletter-btn-cat"
-          class="rounded-full px-8 py-3.5 font-maven font-bold text-[#1d2242] bg-[#f7ad1f] hover:opacity-95 transition-opacity whitespace-nowrap"
-        >
-          SUSCRIBIRME
-        </button>
+  <!-- Newsletter -->
+  <section class="newsletter-cat">
+    <div class="newsletter-cat-container">
+      <h2>Reciba información sobre minería de criptomonedas.</h2>
+      <p>Suscríbase y reciba semanalmente análisis de mercado, novedades del sector y oportunidades de minería directamente en su correo.</p>
+      <form id="newsletter-form-cat">
+        <input type="email" id="newsletter-email-cat" placeholder="Su correo electrónico aquí..." required />
+        <button type="submit" id="newsletter-btn-cat">SUSCRIBIRME</button>
       </form>
       <p id="newsletter-msg-cat" style="display:none; margin-top:12px; font-weight:600;"></p>
       <script>
@@ -448,6 +422,80 @@ const glossary = [
       </script>
     </div>
   </section>
+
+  <style>
+    .newsletter-cat {
+      background: var(--bg-deep);
+      padding: 80px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .newsletter-cat-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .newsletter-cat h2 {
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 900;
+      font-size: clamp(22px, 2.5vw, 30px);
+      text-transform: uppercase;
+      color: #f7ad1f;
+      -webkit-text-fill-color: #f7ad1f;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .newsletter-cat p {
+      font-size: 18px;
+      color: white;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+    .newsletter-cat form {
+      display: flex;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .newsletter-cat input {
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      padding: 18px 16px;
+      font-size: 16px;
+      color: white;
+      font-family: 'Archivo', sans-serif;
+      outline: none;
+    }
+    .newsletter-cat input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .newsletter-cat button {
+      background: #f7ad1f;
+      color: #1d2242;
+      font-family: 'Maven Pro', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      padding: 18px 32px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .newsletter-cat button:hover { opacity: 0.9; }
+    @media (max-width: 768px) {
+      .newsletter-cat { padding: 60px 40px; }
+    }
+    @media (max-width: 480px) {
+      .newsletter-cat { padding: 40px 20px; }
+      .newsletter-cat form { flex-direction: column; }
+    }
+  </style>
 
   <script is:inline>
     document.querySelectorAll('[data-faq-btn]').forEach(function (btn) {
