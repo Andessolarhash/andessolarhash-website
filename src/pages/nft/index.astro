@@ -897,19 +897,13 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
     pbtnConnect.addEventListener('click', function() {
       hidePurchaseBox();
       appkit.open({view:'Connect'});
-      // Polling: check every 600ms for up to 3 minutes
+      // Poll only for successful connection — MODAL_CLOSE restores the box
       if (_pollTimer) clearInterval(_pollTimer);
       _pollTimer = setInterval(function() {
         try {
           var acc = appkit.getAccount ? appkit.getAccount() : null;
           var addr = acc && (acc.address || (acc.caipAddress ? acc.caipAddress.split(':').pop() : null));
-          if (addr) { handleWalletConnected(addr); return; }
-          // If AppKit modal closed without connecting, restore box
-          var wm = document.querySelector('w3m-modal, wcm-modal, appkit-modal');
-          if (wm) {
-            var open = wm.getAttribute('open') || wm.shadowRoot?.querySelector('[data-open]');
-            if (open === null || open === 'false') { showPurchaseBox(); clearInterval(_pollTimer); _pollTimer = null; }
-          }
+          if (addr) handleWalletConnected(addr);
         } catch(_) {}
       }, 600);
       setTimeout(function() { if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; showPurchaseBox(); } }, 180000);
