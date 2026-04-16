@@ -743,17 +743,24 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
   // ── POL price (CoinGecko for display, contract for actual amount) ────────
   async function fetchPolPrice() {
     var el = document.getElementById('pol-choose-desc');
-    try {
-      var r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd', { signal: AbortSignal.timeout(6000) });
-      if (!r.ok) throw new Error();
-      var data = await r.json();
-      var polUSD = data['matic-network']?.usd;
-      if (polUSD && el) {
-        var polAmt = (60 / polUSD).toFixed(2);
-        el.textContent = '≈ ' + polAmt + ' POL · $60 USD';
-        return;
-      }
-    } catch(_) {}
+    // Try POL (new token ID), then MATIC fallback
+    var apis = [
+      ['https://api.coingecko.com/api/v3/simple/price?ids=polygon-ecosystem-token&vs_currencies=usd', 'polygon-ecosystem-token'],
+      ['https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd', 'matic-network'],
+    ];
+    for (var i = 0; i < apis.length; i++) {
+      try {
+        var r = await fetch(apis[i][0], { signal: AbortSignal.timeout(6000) });
+        if (!r.ok) continue;
+        var data = await r.json();
+        var polUSD = data[apis[i][1]]?.usd;
+        if (polUSD && el) {
+          var polAmt = (60 / polUSD).toFixed(2);
+          el.textContent = '≈ ' + polAmt + ' POL · $60 USD';
+          return;
+        }
+      } catch(_) {}
+    }
     // Fallback: precio aproximado POL desde contrato
     try {
       var res = await fetch(POLYGON_RPC, {
@@ -834,21 +841,57 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
     pbtnConnect.disabled = false;
     pbtnConnect.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="2"/></svg> Conectar Wallet';
 
-    appkit.subscribeAccount(function(state) {
-      if (state.isConnected && state.address && !connectedWallet) {
-        connectedWallet = state.address;
-        try { appkit.close(); } catch(_) {}
-        // Show wallet row for crypto methods
-        document.getElementById('pkyc-wallet-row').style.display = '';
-        document.getElementById('pgroup-wallet-clp').classList.add('phidden');
-        document.getElementById('pkyc-submit-btn').textContent = 'Continuar al pago →';
-        chip('pkyc-wallet', connectedWallet);
-        chip('ppay-wallet', connectedWallet);
-        showPanel('pp-kyc'); setStep(3);
-      }
-      if (!state.isConnected) connectedWallet = null;
+    // ── Wallet connection handler ──────────────────────────────────────────
+    var _pollTimer = null;
+    function handleWalletConnected(addr) {
+      if (connectedWallet || !addr) return;
+      if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
+      connectedWallet = addr;
+      try { appkit.close(); } catch(_) {}
+      document.getElementById('pkyc-wallet-row').style.display = '';
+      document.getElementById('pgroup-wallet-clp').classList.add('phidden');
+      document.getElementById('pkyc-submit-btn').textContent = 'Continuar al pago →';
+      chip('pkyc-wallet', connectedWallet);
+      chip('ppay-wallet', connectedWallet);
+      showPanel('pp-kyc'); setStep(3);
+    }
+
+    // subscribeAccount (fires in most browsers)
+    try {
+      appkit.subscribeAccount(function(state) {
+        var addr = state.address || (state.caipAddress ? state.caipAddress.split(':').pop() : null);
+        var connected = state.isConnected || state.status === 'connected';
+        if (connected && addr) handleWalletConnected(addr);
+        if (!connected && !state.address) connectedWallet = null;
+      });
+    } catch(_) {}
+
+    // subscribeEvents fallback (fires on CONNECT_SUCCESS in all AppKit versions)
+    try {
+      appkit.subscribeEvents(function(ev) {
+        var name = ev?.data?.event || ev?.event || '';
+        if (name === 'CONNECT_SUCCESS' || name === 'MODAL_CLOSE') {
+          try {
+            var acc = appkit.getAccount ? appkit.getAccount() : null;
+            if (acc && acc.address) handleWalletConnected(acc.address);
+          } catch(_) {}
+        }
+      });
+    } catch(_) {}
+
+    pbtnConnect.addEventListener('click', function() {
+      appkit.open({view:'Connect'});
+      // Polling fallback: check every 600ms for up to 3 minutes
+      if (_pollTimer) clearInterval(_pollTimer);
+      _pollTimer = setInterval(function() {
+        try {
+          var acc = appkit.getAccount ? appkit.getAccount() : null;
+          var addr = acc && (acc.address || (acc.caipAddress ? acc.caipAddress.split(':').pop() : null));
+          if (addr) handleWalletConnected(addr);
+        } catch(_) {}
+      }, 600);
+      setTimeout(function() { if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; } }, 180000);
     });
-    pbtnConnect.addEventListener('click', function() { appkit.open({view:'Connect'}); });
   }).catch(function() {
     pbtnConnect.disabled = false;
     pbtnConnect.innerHTML = 'Conectar Wallet';
