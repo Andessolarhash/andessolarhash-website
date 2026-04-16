@@ -843,9 +843,16 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
 
     // ── Wallet connection handler ──────────────────────────────────────────
     var _pollTimer = null;
+    var _pmodalOverlay = document.getElementById('purchase-modal');
     var _pmodalBox = document.querySelector('.pmodal-box');
-    function showPurchaseBox() { if (_pmodalBox) _pmodalBox.classList.remove('wallet-open'); }
-    function hidePurchaseBox() { if (_pmodalBox) _pmodalBox.classList.add('wallet-open'); }
+    function showPurchaseBox() {
+      if (_pmodalOverlay) { _pmodalOverlay.style.background = 'rgba(0,0,0,0.75)'; _pmodalOverlay.style.backdropFilter = 'blur(4px)'; }
+      if (_pmodalBox) _pmodalBox.classList.remove('wallet-open');
+    }
+    function hidePurchaseBox() {
+      if (_pmodalOverlay) { _pmodalOverlay.style.background = 'transparent'; _pmodalOverlay.style.backdropFilter = 'none'; }
+      if (_pmodalBox) _pmodalBox.classList.add('wallet-open');
+    }
     function handleWalletConnected(addr) {
       if (connectedWallet || !addr) return;
       if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
