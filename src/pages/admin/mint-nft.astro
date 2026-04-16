@@ -99,12 +99,14 @@ const title = 'Admin — Mint NFT | Andes Solar Hash';
     ];
 
     let connectedAddr = null;
+    let _appkit = null;
+    let _ethers = null;
 
-    const btnConnect  = document.getElementById('btn-connect');
-    const btnMint     = document.getElementById('btn-mint');
-    const walletChip  = document.getElementById('wallet-chip');
-    const ownerWarn   = document.getElementById('owner-warn');
-    const statusBox   = document.getElementById('status-box');
+    const btnConnect = document.getElementById('btn-connect');
+    const btnMint    = document.getElementById('btn-mint');
+    const walletChip = document.getElementById('wallet-chip');
+    const ownerWarn  = document.getElementById('owner-warn');
+    const statusBox  = document.getElementById('status-box');
 
     function showStatus(msg, type) {
       statusBox.className = 'status ' + type;
@@ -113,51 +115,79 @@ const title = 'Admin — Mint NFT | Andes Solar Hash';
     }
     function hideStatus() { statusBox.style.display = 'none'; }
 
-    async function connectWallet() {
-      if (!window.ethereum) {
-        showStatus('No se detectó MetaMask. Instala MetaMask en este navegador.', 'err');
-        return;
-      }
-      try {
-        const { ethers } = await import('https://esm.sh/ethers@6.13.0?bundle');
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        await provider.send('eth_requestAccounts', []);
-
-        // Ensure Polygon network
-        try {
-          await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x89' }] });
-        } catch(e) {
-          if (e.code === 4902) {
-            await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{
-              chainId: '0x89', chainName: 'Polygon', nativeCurrency: { name:'POL', symbol:'POL', decimals:18 },
-              rpcUrls: [POLYGON_RPC], blockExplorerUrls: ['https://polygonscan.com']
-            }]});
-          }
-        }
-
-        const signer = await provider.getSigner();
-        connectedAddr = await signer.getAddress();
-
-        walletChip.textContent = connectedAddr;
-        walletChip.style.display = 'block';
-        btnConnect.textContent = '✓ Wallet conectada';
-        btnConnect.style.background = 'rgba(74,222,128,0.1)';
-        btnConnect.style.color = '#4ade80';
-        btnConnect.style.borderColor = 'rgba(74,222,128,0.3)';
-
-        // Check if owner
-        const isOwner = connectedAddr.toLowerCase() === OWNER_ADDR.toLowerCase();
-        ownerWarn.style.display = isOwner ? 'none' : 'block';
-        btnMint.disabled = !isOwner;
-
-        if (isOwner) hideStatus();
-
-      } catch(e) {
-        showStatus('Error al conectar: ' + (e.message || e), 'err');
-      }
+    function onWalletConnected(addr) {
+      if (connectedAddr) return;
+      connectedAddr = addr;
+      try { _appkit.close(); } catch(_) {}
+      walletChip.textContent = addr;
+      walletChip.style.display = 'block';
+      btnConnect.innerHTML = '✓ Wallet conectada';
+      btnConnect.style.background = 'rgba(74,222,128,0.1)';
+      btnConnect.style.color = '#4ade80';
+      btnConnect.style.borderColor = 'rgba(74,222,128,0.3)';
+      const isOwner = addr.toLowerCase() === OWNER_ADDR.toLowerCase();
+      ownerWarn.style.display = isOwner ? 'none' : 'block';
+      btnMint.disabled = !isOwner;
+      if (isOwner) hideStatus();
     }
 
-    async function mintNFT() {
+    // Load AppKit (same as main NFT modal)
+    btnConnect.innerHTML = '⟳ Cargando…';
+    btnConnect.disabled = true;
+
+    Promise.all([
+      import('https://esm.sh/@reown/appkit@1.7.7?bundle'),
+      import('https://esm.sh/@reown/appkit-adapter-ethers@1.7.7?bundle'),
+      import('https://esm.sh/ethers@6.13.0?bundle'),
+    ]).then(([appkitMod, adapterMod, ethersMod]) => {
+      _ethers = ethersMod;
+      const polygon = {
+        id:137, caipNetworkId:'eip155:137', chainNamespace:'eip155', name:'Polygon',
+        nativeCurrency:{name:'POL',symbol:'POL',decimals:18},
+        rpcUrls:{default:{http:[POLYGON_RPC]}},
+        blockExplorers:{default:{name:'PolygonScan',url:'https://polygonscan.com'}}
+      };
+      _appkit = appkitMod.createAppKit({
+        adapters: [new adapterMod.EthersAdapter()],
+        networks: [polygon], defaultNetwork: polygon,
+        projectId: '5ad962d1ec9b99a4e42bd27b2cbabb96',
+        metadata: { name:'Andes Solar Hash Admin', description:'Admin mint panel', url:'https://andessolarhash.com', icons:['https://andessolarhash.com/favicon.svg'] },
+        features: { analytics:false, email:false, socials:[] }
+      });
+
+      btnConnect.innerHTML = '🔗 Conectar wallet de owner';
+      btnConnect.disabled = false;
+
+      // Listen for connection
+      try {
+        _appkit.subscribeAccount(s => {
+          const addr = s.address || (s.caipAddress ? s.caipAddress.split(':').pop() : null);
+          const ok   = s.isConnected || s.status === 'connected';
+          if (ok && addr) onWalletConnected(addr);
+          if (!ok && !s.address) { connectedAddr = null; btnMint.disabled = true; }
+        });
+      } catch(_) {}
+      try {
+        _appkit.subscribeEvents(ev => {
+          const name = ev?.data?.event || '';
+          if (name === 'CONNECT_SUCCESS') {
+            const acc = _appkit.getAccount?.();
+            if (acc?.address) onWalletConnected(acc.address);
+          }
+        });
+      } catch(_) {}
+
+    }).catch(e => {
+      btnConnect.innerHTML = '🔗 Conectar wallet';
+      btnConnect.disabled = false;
+      showStatus('Error cargando AppKit: ' + e.message, 'err');
+    });
+
+    btnConnect.addEventListener('click', () => {
+      if (_appkit) _appkit.open({ view: 'Connect' });
+    });
+
+    btnMint.addEventListener('click', async () => {
       const toAddr = document.getElementById('input-wallet').value.trim();
       const qty    = parseInt(document.getElementById('input-qty').value) || 1;
 
@@ -165,45 +195,39 @@ const title = 'Admin — Mint NFT | Andes Solar Hash';
         showStatus('Ingresa una dirección de wallet válida (0x...)', 'err');
         return;
       }
+      if (!connectedAddr) { showStatus('Conecta tu wallet primero.', 'err'); return; }
 
       try {
         showStatus('⟳ Preparando transacción…', 'pending');
         btnMint.disabled = true;
         btnMint.textContent = '⟳ Procesando…';
 
-        const { ethers } = await import('https://esm.sh/ethers@6.13.0?bundle');
-        const provider = new ethers.BrowserProvider(window.ethereum);
+        const provider = new _ethers.BrowserProvider(window.ethereum);
         const signer   = await provider.getSigner();
-        const contract = new ethers.Contract(CONTRACT, ADMIN_MINT_ABI, signer);
+        const contract = new _ethers.Contract(CONTRACT, ADMIN_MINT_ABI, signer);
 
-        showStatus('⟳ Confirmando en MetaMask…', 'pending');
+        showStatus('⟳ Confirma en tu wallet…', 'pending');
         const tx = await contract.adminMint(1n, toAddr, BigInt(qty));
-
-        showStatus('⟳ Transacción enviada. Esperando confirmación en Polygon…<br/><small>Hash: ' + tx.hash + '</small>', 'pending');
-
+        showStatus('⟳ Enviada. Esperando confirmación en Polygon…<br/><small style="word-break:break-all">' + tx.hash + '</small>', 'pending');
         await tx.wait();
 
         showStatus(
-          '✓ NFT minteado correctamente.<br/>' +
-          '<strong>Wallet destino:</strong> ' + toAddr + '<br/>' +
+          '✓ NFT minteado.<br/>' +
+          '<strong>Wallet:</strong> ' + toAddr + '<br/>' +
           '<strong>Cantidad:</strong> ' + qty + '<br/>' +
           '<a class="tx-link" href="https://polygonscan.com/tx/' + tx.hash + '" target="_blank">Ver en PolygonScan →</a>',
           'ok'
         );
-
         document.getElementById('input-wallet').value = '';
         document.getElementById('input-note').value = '';
 
       } catch(e) {
-        showStatus('Error: ' + (e.reason || e.message || 'Transacción rechazada'), 'err');
+        showStatus('Error: ' + (e.reason || e.message || 'Rechazada'), 'err');
       } finally {
         btnMint.disabled = false;
         btnMint.textContent = '⚡ Mintear NFT';
       }
-    }
-
-    btnConnect.addEventListener('click', connectWallet);
-    btnMint.addEventListener('click', mintNFT);
+    });
   </script>
 </body>
 </html>
