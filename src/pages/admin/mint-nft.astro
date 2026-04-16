@@ -202,7 +202,10 @@ const title = 'Admin — Mint NFT | Andes Solar Hash';
         btnMint.disabled = true;
         btnMint.textContent = '⟳ Procesando…';
 
-        const provider = new _ethers.BrowserProvider(window.ethereum);
+        // Get provider from AppKit (works with MetaMask, WalletConnect, etc.)
+        const walletProvider = _appkit.getWalletProvider?.() || window.ethereum;
+        if (!walletProvider) throw new Error('No se encontró el provider de la wallet. Reconecta.');
+        const provider = new _ethers.BrowserProvider(walletProvider);
         const signer   = await provider.getSigner();
         const contract = new _ethers.Contract(CONTRACT, ADMIN_MINT_ABI, signer);
 
