@@ -1,0 +1,209 @@
+---
+// Panel de administración — mint manual de NFTs para compradores CLP
+// Solo accesible para el owner del contrato. URL: /admin/mint-nft/
+const title = 'Admin — Mint NFT | Andes Solar Hash';
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@700;800&family=Archivo:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0b0d1b; color: #fff; font-family: 'Archivo', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: #111428; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; width: 100%; max-width: 520px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .logo-dot { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#e08324,#f7ad1f); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #0b0d1b; }
+    h1 { font-family: 'Maven Pro', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .sub { color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 28px; }
+    .info-box { background: rgba(247,173,31,0.08); border: 1px solid rgba(247,173,31,0.25); border-radius: 12px; padding: 14px 16px; margin-bottom: 24px; font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .info-box strong { color: #f7ad1f; }
+    label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 14px; color: #fff; font-family: 'Archivo', sans-serif; font-size: 14px; margin-bottom: 18px; outline: none; transition: border-color 0.2s; }
+    input:focus { border-color: rgba(247,173,31,0.5); }
+    input::placeholder { color: rgba(255,255,255,0.2); }
+    .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-family: 'Maven Pro', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-connect { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 12px; }
+    .btn-connect:hover { background: rgba(255,255,255,0.13); }
+    .btn-mint { background: linear-gradient(135deg,#e08324,#f7ad1f); color: #0b0d1b; margin-top: 4px; }
+    .btn-mint:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-mint:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .wallet-chip { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-family: monospace; margin-bottom: 18px; display: none; word-break: break-all; }
+    .status { border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.6; margin-top: 16px; display: none; }
+    .status.ok  { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+    .status.err { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); color: #ff6b6b; }
+    .status.pending { background: rgba(247,173,31,0.1); border: 1px solid rgba(247,173,31,0.3); color: #f7ad1f; }
+    .divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 20px 0; }
+    a.tx-link { color: #f7ad1f; text-decoration: none; font-size: 12px; }
+    a.tx-link:hover { text-decoration: underline; }
+    .owner-warn { display: none; background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); color: #ff6b6b; border-radius: 10px; padding: 10px 14px; font-size: 12px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-dot">ASH</div>
+      <div>
+        <div style="font-family:'Maven Pro',sans-serif;font-weight:800;font-size:15px;">Andes Solar Hash</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.3);">Panel Admin — Mint Manual</div>
+      </div>
+    </div>
+
+    <h1>Enviar NFT a comprador CLP</h1>
+    <p class="sub">Para pagos en pesos chilenos completados. Solo el owner del contrato puede ejecutar esta acción.</p>
+
+    <div class="info-box">
+      <strong>Contrato:</strong> 0x40D9a1FDec62795723f065b05f792A6159727864<br/>
+      <strong>Red:</strong> Polygon Mainnet<br/>
+      <strong>Función:</strong> adminMint(vaultId=1, to=wallet, amount=1)
+    </div>
+
+    <!-- Step 1: Connect wallet -->
+    <button class="btn btn-connect" id="btn-connect">
+      🔗 Conectar wallet de owner
+    </button>
+    <div class="wallet-chip" id="wallet-chip"></div>
+    <div class="owner-warn" id="owner-warn">⚠️ Esta wallet no es el owner del contrato. Conecta la wallet correcta.</div>
+
+    <hr class="divider" />
+
+    <!-- Step 2: Mint form -->
+    <div id="mint-form">
+      <label for="input-wallet">Wallet del comprador</label>
+      <input type="text" id="input-wallet" placeholder="0x..." autocomplete="off" />
+
+      <label for="input-qty">Cantidad de NFTs</label>
+      <input type="number" id="input-qty" value="1" min="1" max="10" />
+
+      <label for="input-note">Nota (opcional — para tu registro)</label>
+      <input type="text" id="input-note" placeholder="Ej: Juan Pérez — pago Flow #12345" />
+
+      <button class="btn btn-mint" id="btn-mint" disabled>
+        ⚡ Mintear NFT
+      </button>
+    </div>
+
+    <div class="status" id="status-box"></div>
+  </div>
+
+  <script type="module">
+    const CONTRACT   = '0x40D9a1FDec62795723f065b05f792A6159727864';
+    const OWNER_ADDR = '0x202dd7A55AA77b80272f1612ab4cbb2A03648735';
+    const POLYGON_RPC = 'https://polygon-bor-rpc.publicnode.com';
+    const ADMIN_MINT_ABI = [
+      'function adminMint(uint256 vaultId, address to, uint256 balanceToMint)',
+      'function owner() view returns (address)',
+    ];
+
+    let connectedAddr = null;
+
+    const btnConnect  = document.getElementById('btn-connect');
+    const btnMint     = document.getElementById('btn-mint');
+    const walletChip  = document.getElementById('wallet-chip');
+    const ownerWarn   = document.getElementById('owner-warn');
+    const statusBox   = document.getElementById('status-box');
+
+    function showStatus(msg, type) {
+      statusBox.className = 'status ' + type;
+      statusBox.style.display = 'block';
+      statusBox.innerHTML = msg;
+    }
+    function hideStatus() { statusBox.style.display = 'none'; }
+
+    async function connectWallet() {
+      if (!window.ethereum) {
+        showStatus('No se detectó MetaMask. Instala MetaMask en este navegador.', 'err');
+        return;
+      }
+      try {
+        const { ethers } = await import('https://esm.sh/ethers@6.13.0?bundle');
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+
+        // Ensure Polygon network
+        try {
+          await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x89' }] });
+        } catch(e) {
+          if (e.code === 4902) {
+            await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{
+              chainId: '0x89', chainName: 'Polygon', nativeCurrency: { name:'POL', symbol:'POL', decimals:18 },
+              rpcUrls: [POLYGON_RPC], blockExplorerUrls: ['https://polygonscan.com']
+            }]});
+          }
+        }
+
+        const signer = await provider.getSigner();
+        connectedAddr = await signer.getAddress();
+
+        walletChip.textContent = connectedAddr;
+        walletChip.style.display = 'block';
+        btnConnect.textContent = '✓ Wallet conectada';
+        btnConnect.style.background = 'rgba(74,222,128,0.1)';
+        btnConnect.style.color = '#4ade80';
+        btnConnect.style.borderColor = 'rgba(74,222,128,0.3)';
+
+        // Check if owner
+        const isOwner = connectedAddr.toLowerCase() === OWNER_ADDR.toLowerCase();
+        ownerWarn.style.display = isOwner ? 'none' : 'block';
+        btnMint.disabled = !isOwner;
+
+        if (isOwner) hideStatus();
+
+      } catch(e) {
+        showStatus('Error al conectar: ' + (e.message || e), 'err');
+      }
+    }
+
+    async function mintNFT() {
+      const toAddr = document.getElementById('input-wallet').value.trim();
+      const qty    = parseInt(document.getElementById('input-qty').value) || 1;
+
+      if (!toAddr || !toAddr.startsWith('0x') || toAddr.length !== 42) {
+        showStatus('Ingresa una dirección de wallet válida (0x...)', 'err');
+        return;
+      }
+
+      try {
+        showStatus('⟳ Preparando transacción…', 'pending');
+        btnMint.disabled = true;
+        btnMint.textContent = '⟳ Procesando…';
+
+        const { ethers } = await import('https://esm.sh/ethers@6.13.0?bundle');
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer   = await provider.getSigner();
+        const contract = new ethers.Contract(CONTRACT, ADMIN_MINT_ABI, signer);
+
+        showStatus('⟳ Confirmando en MetaMask…', 'pending');
+        const tx = await contract.adminMint(1n, toAddr, BigInt(qty));
+
+        showStatus('⟳ Transacción enviada. Esperando confirmación en Polygon…<br/><small>Hash: ' + tx.hash + '</small>', 'pending');
+
+        await tx.wait();
+
+        showStatus(
+          '✓ NFT minteado correctamente.<br/>' +
+          '<strong>Wallet destino:</strong> ' + toAddr + '<br/>' +
+          '<strong>Cantidad:</strong> ' + qty + '<br/>' +
+          '<a class="tx-link" href="https://polygonscan.com/tx/' + tx.hash + '" target="_blank">Ver en PolygonScan →</a>',
+          'ok'
+        );
+
+        document.getElementById('input-wallet').value = '';
+        document.getElementById('input-note').value = '';
+
+      } catch(e) {
+        showStatus('Error: ' + (e.reason || e.message || 'Transacción rechazada'), 'err');
+      } finally {
+        btnMint.disabled = false;
+        btnMint.textContent = '⚡ Mintear NFT';
+      }
+    }
+
+    btnConnect.addEventListener('click', connectWallet);
+    btnMint.addEventListener('click', mintNFT);
+  </script>
+</body>
+</html>
