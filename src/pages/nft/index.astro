@@ -843,10 +843,14 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
 
     // ── Wallet connection handler ──────────────────────────────────────────
     var _pollTimer = null;
+    var _pmodalBox = document.querySelector('.pmodal-box');
+    function showPurchaseBox() { if (_pmodalBox) _pmodalBox.classList.remove('wallet-open'); }
+    function hidePurchaseBox() { if (_pmodalBox) _pmodalBox.classList.add('wallet-open'); }
     function handleWalletConnected(addr) {
       if (connectedWallet || !addr) return;
       if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
       connectedWallet = addr;
+      showPurchaseBox();
       try { appkit.close(); } catch(_) {}
       document.getElementById('pkyc-wallet-row').style.display = '';
       document.getElementById('pgroup-wallet-clp').classList.add('phidden');
@@ -866,31 +870,42 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
       });
     } catch(_) {}
 
-    // subscribeEvents fallback (fires on CONNECT_SUCCESS in all AppKit versions)
+    // subscribeEvents fallback
     try {
       appkit.subscribeEvents(function(ev) {
         var name = ev?.data?.event || ev?.event || '';
-        if (name === 'CONNECT_SUCCESS' || name === 'MODAL_CLOSE') {
+        if (name === 'CONNECT_SUCCESS') {
           try {
             var acc = appkit.getAccount ? appkit.getAccount() : null;
             if (acc && acc.address) handleWalletConnected(acc.address);
           } catch(_) {}
         }
+        if (name === 'MODAL_CLOSE') {
+          // User closed modal without connecting — restore purchase box
+          if (!connectedWallet) showPurchaseBox();
+        }
       });
     } catch(_) {}
 
     pbtnConnect.addEventListener('click', function() {
+      hidePurchaseBox();
       appkit.open({view:'Connect'});
-      // Polling fallback: check every 600ms for up to 3 minutes
+      // Polling: check every 600ms for up to 3 minutes
       if (_pollTimer) clearInterval(_pollTimer);
       _pollTimer = setInterval(function() {
         try {
           var acc = appkit.getAccount ? appkit.getAccount() : null;
           var addr = acc && (acc.address || (acc.caipAddress ? acc.caipAddress.split(':').pop() : null));
-          if (addr) handleWalletConnected(addr);
+          if (addr) { handleWalletConnected(addr); return; }
+          // If AppKit modal closed without connecting, restore box
+          var wm = document.querySelector('w3m-modal, wcm-modal, appkit-modal');
+          if (wm) {
+            var open = wm.getAttribute('open') || wm.shadowRoot?.querySelector('[data-open]');
+            if (open === null || open === 'false') { showPurchaseBox(); clearInterval(_pollTimer); _pollTimer = null; }
+          }
         } catch(_) {}
       }, 600);
-      setTimeout(function() { if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; } }, 180000);
+      setTimeout(function() { if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; showPurchaseBox(); } }, 180000);
     });
   }).catch(function() {
     pbtnConnect.disabled = false;
@@ -1048,6 +1063,9 @@ const imgBitmainLogo = '/images/nft/figma/bitmain_logo.webp';
 <style>
   /* MODAL OVERLAY */
   .pmodal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
+  /* WalletConnect / AppKit modal must appear above our modal */
+  w3m-modal, wcm-modal, appkit-modal, [data-testid="w3m-modal"] { z-index:100000 !important; position:relative; }
+  .pmodal-box.wallet-open { visibility:hidden; }
   .pmodal-box { background:#111428; border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:40px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; position:relative; }
   .pmodal-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.08); border:none; color:rgba(255,255,255,0.5); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
   .pmodal-close:hover { background:rgba(255,107,107,0.2); color:#ff6b6b; }
