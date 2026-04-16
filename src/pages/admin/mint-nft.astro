@@ -212,10 +212,28 @@ const title = 'Admin — Mint NFT | Andes Solar Hash';
         showStatus('⟳ Confirma en tu wallet…', 'pending');
         const tx = await contract.adminMint(1n, toAddr, BigInt(qty));
         showStatus('⟳ Enviada. Esperando confirmación en Polygon…<br/><small style="word-break:break-all">' + tx.hash + '</small>', 'pending');
-        await tx.wait();
+        const receipt = await tx.wait();
+
+        // Parse TransferSingle event to get the token ID
+        // TransferSingle(address operator, address from, address to, uint256 id, uint256 value)
+        const transferSingleTopic = _ethers.id('TransferSingle(address,address,address,uint256,uint256)');
+        let tokenId = null;
+        for (const log of receipt.logs) {
+          if (log.topics[0] === transferSingleTopic) {
+            // id is the 4th topic (index 3) or in data depending on indexed params
+            // TransferSingle: operator(indexed), from(indexed), to(indexed), id, value
+            // id and value are NOT indexed — they're in data
+            try {
+              const decoded = _ethers.AbiCoder.defaultAbiCoder().decode(['uint256','uint256'], log.data);
+              tokenId = decoded[0].toString();
+            } catch(_) {}
+            break;
+          }
+        }
 
         showStatus(
           '✓ NFT minteado.<br/>' +
+          (tokenId ? '<strong>🆔 Minero #' + tokenId + '</strong><br/>' : '') +
           '<strong>Wallet:</strong> ' + toAddr + '<br/>' +
           '<strong>Cantidad:</strong> ' + qty + '<br/>' +
           '<a class="tx-link" href="https://polygonscan.com/tx/' + tx.hash + '" target="_blank">Ver en PolygonScan →</a>',
